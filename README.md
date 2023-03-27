@@ -9,5 +9,6 @@
 - Provedena migrace datového modelu do PostgreSQL pomocí projektu **LiftApp-migrations** (návod v README.md v projektu **LiftApp-migrations**)
 
 ### Postup
+1. Otevřít solution `src\LiftApp\LiftApp.sln`
 1. Upravit connection string `ConnectionStrings.DefaultConnection` v konfiguračním souboru `src\LiftApp\appsettings.json`. **Connection string musí být totožný v obou projektech LiftApp-migrations i LiftApp !!!**
 2. Následně je možné projekt sestavit a spustit aplikaci
