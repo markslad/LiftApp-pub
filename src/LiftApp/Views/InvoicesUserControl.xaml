@@ -1,0 +1,81 @@
+﻿<UserControl x:Class="LiftApp.Views.InvoicesUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewModels="clr-namespace:LiftApp.ViewModels" 
+             xmlns:converters="clr-namespace:LiftApp.Converters"
+             d:DataContext="{d:DesignInstance Type=viewModels:InvoicesViewModel}"
+             xmlns:local="clr-namespace:LiftApp.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="720" d:DesignWidth="1280"
+             Style="{StaticResource ControlBackgoundColor}">
+
+    <UserControl.Resources>
+        <converters:BoolToStringConverter x:Key="BoolToStringConverter"/>
+        <converters:DateToStringConverter x:Key="DateToStringConverter"/>
+    </UserControl.Resources>
+
+    <Border Style="{StaticResource BorderBackgoundColor}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Přehled faktur" Grid.Row="0" Style="{StaticResource ControlCaption}"/>
+
+            <GroupBox Header="Operace" Grid.Row="1" Margin="5" Padding="5">
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Nová faktura" Style="{StaticResource ControlButton}" Command="{Binding ShowNewInvoiceCommand}"/>
+                    <Button Content="Potvrdit zaplacení" IsEnabled="{Binding ConfirmPaymentButtonEnabled}" Style="{StaticResource ControlButton}" Command="{Binding ConfirmPaymentCommand}"/>
+                    <Button Content="Odstranit" IsEnabled="{Binding DeleteButtonEnabled}" Style="{StaticResource ControlButton}" Command="{Binding DeleteInvoiceCommand}"/>
+                    <TextBlock Text="Filtrovat (Identifikátor):" TextAlignment="Center" VerticalAlignment="Center" Style="{StaticResource ControlElement}"/>
+                    <TextBox Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ControlTextBox}"/>
+                    <Button Content="Export do PDF" IsEnabled="{Binding ExportButtonEnabled}" Style="{StaticResource ControlButton}" Command="{Binding ExportInvoiceCommand}"/>
+                </StackPanel>
+            </GroupBox>
+            
+            <DataGrid Grid.Row="2" 
+                      ItemsSource="{Binding InvoicesView}" 
+                      SelectedItem="{Binding SelectedInvoice}"
+                      SelectionMode="Single"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserResizeColumns="False"
+                      CanUserResizeRows="False"
+                      IsReadOnly="True"
+                      CellStyle="{StaticResource ContainerDatagridCellStyle}">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Identifikátor" Binding="{Binding Identifier}" HeaderStyle="{StaticResource CenterGridHeaderStyle}"/>
+                    <DataGridTemplateColumn Header="Výpůjčka" HeaderStyle="{StaticResource CenterGridHeaderStyle}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <Hyperlink Command="{Binding DataContext.ShowBorrowalDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
+                                               CommandParameter="{Binding Borrowal}">
+                                         <TextBlock Text="Detail" />
+                                    </Hyperlink>
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Mimořádná" Binding="{Binding IsExtra, Converter={StaticResource BoolToStringConverter}}" HeaderStyle="{StaticResource CenterGridHeaderStyle}"/>
+                    <DataGridTextColumn Header="Datum vystavení" Binding="{Binding DateOfIssue, Converter={StaticResource DateToStringConverter}}" HeaderStyle="{StaticResource CenterGridHeaderStyle}"/>
+                    <DataGridTextColumn Header="Datum splatnosti" Binding="{Binding DueDate, Converter={StaticResource DateToStringConverter}}" HeaderStyle="{StaticResource CenterGridHeaderStyle}"/>
+                    <DataGridTextColumn Header="Datum zdanitelného plnění" Binding="{Binding DateOfTaxableSupply, Converter={StaticResource DateToStringConverter}}" HeaderStyle="{StaticResource CenterGridHeaderStyle}"/>
+                    <DataGridTextColumn Header="Popis" Binding="{Binding Description}" HeaderStyle="{StaticResource CenterGridHeaderStyle}"/>
+                    <DataGridTextColumn Header="Cena" Binding="{Binding Price}" HeaderStyle="{StaticResource CenterGridHeaderStyle}"/>
+                    <DataGridTextColumn Header="DPH" Binding="{Binding ValueAddedTaxRate, FallbackValue='-', TargetNullValue='-'}" HeaderStyle="{StaticResource CenterGridHeaderStyle}"/>
+                    <DataGridTextColumn Header="Banka" Binding="{Binding Bank}" HeaderStyle="{StaticResource CenterGridHeaderStyle}"/>
+                    <DataGridTextColumn Header="Bankovní účet" Binding="{Binding BankAccount}" HeaderStyle="{StaticResource CenterGridHeaderStyle}"/>
+                    <DataGridTextColumn Header="Variabilní symbol" Binding="{Binding VariableSymbol}" HeaderStyle="{StaticResource CenterGridHeaderStyle}"/>
+                    <DataGridTextColumn Header="Zaplacena" Binding="{Binding Paid, Converter={StaticResource BoolToStringConverter}}" HeaderStyle="{StaticResource CenterGridHeaderStyle}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Border>
+</UserControl>

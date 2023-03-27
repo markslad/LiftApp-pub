@@ -1,0 +1,291 @@
+﻿<UserControl x:Class="LiftApp.Views.NewInvoiceUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewModels="clr-namespace:LiftApp.ViewModels" 
+             d:DataContext="{d:DesignInstance Type=viewModels:NewInvoiceViewModel}"
+             xmlns:converters="clr-namespace:LiftApp.Converters"
+             xmlns:local="clr-namespace:LiftApp.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <converters:BorrowalToStringConverter x:Key="BorrowalToStringConverter"/>
+        <converters:BoolToVisibilityCollapsedConverter x:Key="BoolToVisibilityCollapsedConverter"/>
+    </UserControl.Resources>
+
+        
+    <ScrollViewer>
+        <Border Height="800" Width="400" 
+                Style="{StaticResource BorderBackgoundColor}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Nová faktura" Grid.Row="0" Style="{StaticResource ControlCaption}"/>
+
+
+                <StackPanel Orientation="Vertical" Grid.Row="1" Margin="5">
+
+                    <DockPanel LastChildFill="False">
+                        <TextBlock Text="Číslo faktury" DockPanel.Dock="Left" FontSize="15" Margin="15" VerticalAlignment="Center"/>
+                        <TextBox TabIndex="0" IsReadOnly="True" Text="{Binding Identifier}" IsEnabled="{Binding IdentifierEnabled}" DockPanel.Dock="Right" Width="200" VerticalAlignment="Center" FontSize="15" Margin="10" Padding="2">
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel>
+                                        <AdornedElementPlaceholder/>
+                                        <ItemsControl ItemsSource="{Binding}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                    </DockPanel>
+
+                    <DockPanel LastChildFill="False">
+                        <TextBlock Text="Výpůjčka" DockPanel.Dock="Left" FontSize="15" Margin="15" VerticalAlignment="Center"/>
+                        <ComboBox TabIndex="1" ItemsSource="{Binding Borrowals}" SelectedItem="{Binding SelectedBorrowal}" DockPanel.Dock="Right" Width="200" VerticalAlignment="Center" FontSize="15" Margin="10">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource BorrowalToStringConverter}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel>
+                                        <AdornedElementPlaceholder/>
+                                        <ItemsControl ItemsSource="{Binding}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </ComboBox>
+                    </DockPanel>
+
+                    <DockPanel LastChildFill="False">
+                        <TextBlock Text="Datum vystavení" DockPanel.Dock="Left" FontSize="15" Margin="15" VerticalAlignment="Center"/>
+                        <DatePicker TabIndex="2" SelectedDate="{Binding DateOfIssue, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" DockPanel.Dock="Right" Width="200" VerticalAlignment="Center" FontSize="15" Margin="10">
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel>
+                                        <AdornedElementPlaceholder/>
+                                        <ItemsControl ItemsSource="{Binding}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </DatePicker>
+                    </DockPanel>
+
+                    <DockPanel LastChildFill="False">
+                        <TextBlock Text="Datum splatnosti" DockPanel.Dock="Left" FontSize="15" Margin="15" VerticalAlignment="Center"/>
+                        <DatePicker TabIndex="3" SelectedDate="{Binding DueDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" DockPanel.Dock="Right" Width="200" VerticalAlignment="Center" FontSize="15" Margin="10">
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel>
+                                        <AdornedElementPlaceholder/>
+                                        <ItemsControl ItemsSource="{Binding}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </DatePicker>
+                    </DockPanel>
+
+                    <DockPanel LastChildFill="False">
+                        <TextBlock Text="Datum us. zd. plnění" DockPanel.Dock="Left" FontSize="15" Margin="15" VerticalAlignment="Center"/>
+                        <DatePicker IsEnabled="False" TabIndex="6" SelectedDate="{Binding DateOfTaxableSupply, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" DockPanel.Dock="Right" Width="200" VerticalAlignment="Center" FontSize="15" Margin="10">
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel>
+                                        <AdornedElementPlaceholder/>
+                                        <ItemsControl ItemsSource="{Binding}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </DatePicker>
+                    </DockPanel>
+
+                    <CheckBox TabIndex="5" IsChecked="{Binding IsExtra}" Content="Mimořádná (sankce...)" VerticalContentAlignment="Center" HorizontalAlignment="Left" IsEnabled="{Binding IdentifierEnabled}" DockPanel.Dock="Left" VerticalAlignment="Center" FontSize="15" Margin="10" Padding="2"/>
+
+                    <DockPanel LastChildFill="False">
+                        <TextBlock Text="Cena" DockPanel.Dock="Left" FontSize="15" Margin="15" VerticalAlignment="Center"/>
+                        <TextBox TabIndex="4" Text="{Binding Price}" IsReadOnly="{Binding IsPriceReadOnly}" DockPanel.Dock="Right" Width="200" VerticalAlignment="Center" FontSize="15" Margin="10" Padding="2">
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel>
+                                        <AdornedElementPlaceholder/>
+                                        <ItemsControl ItemsSource="{Binding}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                    </DockPanel>
+
+                    
+                    
+                    <DockPanel LastChildFill="False">
+                        <TextBlock Text="DPH (%)" DockPanel.Dock="Left" FontSize="15" Margin="15" VerticalAlignment="Center"/>
+                        <TextBox TabIndex="7" IsReadOnly="True" Text="{Binding ValueAddedTaxRate}" DockPanel.Dock="Right" Width="200" VerticalAlignment="Center" FontSize="15" Margin="10" Padding="2">
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel>
+                                        <AdornedElementPlaceholder/>
+                                        <ItemsControl ItemsSource="{Binding}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                    </DockPanel>
+
+                    <DockPanel LastChildFill="False">
+                        <TextBlock Text="Cena s DPH" DockPanel.Dock="Left" FontSize="15" Margin="15" VerticalAlignment="Center"/>
+                        <TextBox TabIndex="8" IsReadOnly="True" Text="{Binding PriceWithValueAddedTax}" DockPanel.Dock="Right" Width="200" VerticalAlignment="Center" FontSize="15" Margin="10" Padding="2">
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel>
+                                        <AdornedElementPlaceholder/>
+                                        <ItemsControl ItemsSource="{Binding}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                    </DockPanel>
+
+                    <DockPanel LastChildFill="False">
+                        <TextBlock Text="Banka" DockPanel.Dock="Left" FontSize="15" Margin="15" VerticalAlignment="Center"/>
+                        <TextBox TabIndex="9" IsReadOnly="True" Text="{Binding Bank}" DockPanel.Dock="Right" Width="200" VerticalAlignment="Center" FontSize="15" Margin="10" Padding="2">
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel>
+                                        <AdornedElementPlaceholder/>
+                                        <ItemsControl ItemsSource="{Binding}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                    </DockPanel>
+
+                    <DockPanel LastChildFill="False">
+                        <TextBlock Text="Bankovní účet" DockPanel.Dock="Left" FontSize="15" Margin="15" VerticalAlignment="Center"/>
+                        <TextBox TabIndex="10" IsReadOnly="True" Text="{Binding BankAccount}" DockPanel.Dock="Right" Width="200" VerticalAlignment="Center" FontSize="15" Margin="10" Padding="2">
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel>
+                                        <AdornedElementPlaceholder/>
+                                        <ItemsControl ItemsSource="{Binding}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                    </DockPanel>
+
+                    <DockPanel LastChildFill="False">
+                        <TextBlock Text="Variabilní symbol" DockPanel.Dock="Left" FontSize="15" Margin="15" VerticalAlignment="Center"/>
+                        <TextBox TabIndex="11" IsReadOnly="True" Text="{Binding VariableSymbol}" DockPanel.Dock="Right" Width="200" VerticalAlignment="Center" FontSize="15" Margin="10" Padding="2">
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel>
+                                        <AdornedElementPlaceholder/>
+                                        <ItemsControl ItemsSource="{Binding}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                    </DockPanel>
+
+                    <DockPanel LastChildFill="False">
+                        <TextBlock Text="Dodatečný popis" DockPanel.Dock="Left" FontSize="15" Margin="15" VerticalAlignment="Center"/>
+                        <TextBox TabIndex="12" Text="{Binding Description}" DockPanel.Dock="Right" Width="200" VerticalAlignment="Center" FontSize="15" Margin="10" Padding="2">
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel>
+                                        <AdornedElementPlaceholder/>
+                                        <ItemsControl ItemsSource="{Binding}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                    </DockPanel>
+
+                </StackPanel>
+
+                <Button TabIndex="14" Content="Zavřít" Grid.Row="2" Command="{Binding CloseCommand}" Style="{StaticResource LeftAlignedDialogButton}"/>
+                <Button TabIndex="13" Content="Potvrdit" Grid.Row="2" Command="{Binding SubmitCommand}" Style="{StaticResource RightAlignedDialogButton}"/>
+            </Grid>
+        </Border>
+    </ScrollViewer>
+</UserControl>
